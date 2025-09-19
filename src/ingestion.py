@@ -22,19 +22,13 @@ def get_spark_session():
     builder = (
         SparkSession.builder
         .appName("EquityMarketData")
-        # load Azure + Hadoop JARs into Spark
         .config("spark.jars", jars_str)
-        # Azure storage credentials
-        .config(
-            f"spark.hadoop.fs.azure.account.key.{account}.blob.core.windows.net",
-            key
-        )
+        .config("spark.hadoop.fs.azure.account.key.{}.blob.core.windows.net".format(account), key)
+        .config("spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version", "2")
+        .config("spark.hadoop.fs.azure.committer.name", "directory")
+        .config("spark.hadoop.fs.azure.createRemoteFileSystemDuringInitialization", "true")
+        .config("spark.speculation", "false")
     )
 
     spark = builder.getOrCreate()
     return spark
-
-
-
-
-
