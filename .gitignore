@@ -5,3 +5,4 @@ data/
 output_dir/
 .env
 setup.sh
+build/
